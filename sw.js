@@ -1,7 +1,13 @@
 const CACHE_APP = 'sumendi-app-v5';
 const CACHE_DATA = 'sumendi-data-v5';
-const ASSETS = ['/', '/index.html', '/manifest.json', '/icon-192.png', '/icon-512.png'];
-const API_URL = 'script.google.com';
+const BASE = '/sumendi-app';
+const ASSETS = [
+  BASE+'/',
+  BASE+'/index.html',
+  BASE+'/manifest.json',
+  BASE+'/icon-192.png',
+  BASE+'/icon-512.png'
+];
 
 self.addEventListener('install', function(e){
   e.waitUntil(
@@ -25,16 +31,14 @@ self.addEventListener('activate', function(e){
 self.addEventListener('fetch', function(e){
   var url = e.request.url;
 
-  // Datos de Drive (Google Apps Script) — cache-then-network
-  if(url.indexOf(API_URL) >= 0){
+  // Datos GitHub Pages y CDN — cache con red primero
+  if(url.indexOf('github.io') >= 0 || url.indexOf('cdnjs.cloudflare.com') >= 0){
     e.respondWith(
       caches.open(CACHE_DATA).then(function(cache){
         return fetch(e.request).then(function(response){
-          // Guardar copia fresca en caché
           cache.put(e.request, response.clone());
           return response;
         }).catch(function(){
-          // Sin red — devolver caché aunque sea antigua
           return cache.match(e.request);
         });
       })
@@ -42,23 +46,7 @@ self.addEventListener('fetch', function(e){
     return;
   }
 
-  // Librerías externas (jsPDF, SheetJS) — cache-first
-  if(url.indexOf('cdnjs.cloudflare.com') >= 0){
-    e.respondWith(
-      caches.open(CACHE_DATA).then(function(cache){
-        return cache.match(e.request).then(function(cached){
-          if(cached) return cached;
-          return fetch(e.request).then(function(response){
-            cache.put(e.request, response.clone());
-            return response;
-          });
-        });
-      })
-    );
-    return;
-  }
-
-  // App shell — cache-first
+  // App shell — cache primero
   e.respondWith(
     caches.match(e.request).then(function(r){
       return r || fetch(e.request);
