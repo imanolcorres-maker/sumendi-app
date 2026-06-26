@@ -194,7 +194,49 @@ html,body{height:100%;font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",sa
 .srv-prev-btn{flex:1;padding:14px;border:2px solid rgba(255,255,255,.2);border-radius:13px;background:none;color:rgba(255,255,255,.65);font-size:15px;font-weight:600;cursor:pointer;}
 .srv-next-btn{flex:2;padding:14px;background:#2E7D52;border:none;border-radius:13px;color:#fff;font-size:16px;font-weight:700;cursor:pointer;}
 .srv-fin-btn{flex:2;padding:14px;background:#8E2475;border:none;border-radius:13px;color:#fff;font-size:16px;font-weight:700;cursor:pointer;}
+/* Selector elaboración modo servicio */
+#srv-sel{position:absolute;inset:0;background:#0D2218;z-index:10;display:none;flex-direction:column;}
+#srv-sel.on{display:flex;}
+.srv-sel-hd{background:#1B3A2D;padding:14px 16px;display:flex;align-items:center;gap:10px;flex-shrink:0;}
+.srv-sel-hd h2{color:#fff;font-size:15px;font-weight:700;flex:1;}
+.srv-sel-body{flex:1;overflow-y:auto;padding:12px 16px;}
+.srv-sel-opt{display:flex;align-items:center;justify-content:space-between;padding:16px;background:rgba(255,255,255,.06);border-radius:14px;margin-bottom:10px;cursor:pointer;border:2px solid transparent;transition:all .2s;}
+.srv-sel-opt:active{background:rgba(255,255,255,.12);}
+.srv-sel-opt-left{display:flex;flex-direction:column;gap:4px;}
+.srv-sel-opt-name{color:#fff;font-size:16px;font-weight:700;}
+.srv-sel-opt-meta{color:rgba(255,255,255,.45);font-size:12px;}
+.srv-sel-opt-arr{color:rgba(255,255,255,.4);font-size:24px;}
 
+/* ===== MODO ADAPTADO ===== */
+#adp{position:fixed;inset:0;z-index:8889;background:#F8FAF9;display:none;flex-direction:column;overflow:hidden;}
+#adp.on{display:flex;}
+.adp-hd{background:linear-gradient(135deg,#1B3A2D,#2E7D52);padding:14px 16px;display:flex;align-items:center;gap:10px;flex-shrink:0;}
+.adp-hd h2{color:#fff;font-size:14px;font-weight:700;flex:1;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;}
+.adp-close{background:none;border:none;color:rgba(255,255,255,.7);font-size:26px;cursor:pointer;padding:0;line-height:1;}
+.adp-prog-wrap{height:6px;background:#DDE4E0;flex-shrink:0;}
+.adp-prog-bar{height:6px;background:#2E7D52;transition:width .4s;}
+.adp-alerg{background:#FFEBEE;border-bottom:2px solid #EF9A9A;padding:8px 16px;font-size:12px;font-weight:700;color:#C62828;flex-shrink:0;display:flex;align-items:center;gap:6px;flex-wrap:wrap;}
+.adp-body{flex:1;overflow-y:auto;padding:0;}
+.adp-loading{display:flex;flex-direction:column;align-items:center;justify-content:center;padding:40px 24px;gap:14px;text-align:center;}
+.adp-spinner{width:48px;height:48px;border:4px solid #DDE4E0;border-top-color:#2E7D52;border-radius:50%;animation:adp-spin .8s linear infinite;}
+@keyframes adp-spin{to{transform:rotate(360deg);}}
+.adp-loading-txt{font-size:15px;color:#5C6B63;font-weight:500;}
+/* Paso adaptado */
+.adp-paso{padding:0;border-bottom:2px solid #F0F4F2;transition:background .2s;}
+.adp-paso.completado{background:#E8F5E9;}
+.adp-paso.bloqueado{opacity:.45;pointer-events:none;}
+.adp-paso-hd{display:flex;align-items:flex-start;gap:12px;padding:16px 16px 12px;}
+.adp-num{width:44px;height:44px;border-radius:50%;background:#1565C0;color:#fff;font-size:19px;font-weight:800;display:flex;align-items:center;justify-content:center;flex-shrink:0;transition:background .3s;}
+.adp-paso.completado .adp-num{background:#2E7D52;}
+.adp-paso-txt{flex:1;font-size:16px;line-height:1.65;font-weight:500;color:#222;padding-top:10px;}
+.adp-check-btn{width:38px;height:38px;border-radius:50%;border:2.5px solid #DDE4E0;background:#fff;display:flex;align-items:center;justify-content:center;font-size:20px;color:transparent;cursor:pointer;flex-shrink:0;margin-top:8px;transition:all .2s;-webkit-tap-highlight-color:transparent;}
+.adp-paso.completado .adp-check-btn{border-color:#2E7D52;background:#2E7D52;color:#fff;}
+.adp-alerta{margin:0 16px 14px;background:#FFF3E0;border-left:3px solid #E65100;border-radius:0 8px 8px 0;padding:8px 12px;font-size:13px;color:#BF360C;font-weight:600;}
+.adp-elab-sep{background:#E3F2FD;padding:8px 16px;font-size:11px;font-weight:800;color:#1565C0;text-transform:uppercase;letter-spacing:.5px;}
+.adp-bloqueo-msg{display:none;text-align:center;padding:8px 16px;font-size:12px;color:#E65100;font-weight:600;}
+.adp-paso.activo .adp-bloqueo-msg{display:none;}
+/* Botón adaptado en ficha */
+.btn-adp{flex:1;padding:12px;font-size:14px;background:#6A1B9A;color:#fff;border:none;border-radius:13px;font-weight:700;cursor:pointer;}
 /* MODAL ENVIO */
 #modal-env{position:fixed;inset:0;z-index:9100;background:rgba(0,0,0,.55);display:none;align-items:flex-end;}
 #modal-env.on{display:flex;}
@@ -242,6 +284,15 @@ html,body{height:100%;font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",sa
 
 <!-- MODO EN SERVICIO -->
 <div id="srv">
+  <!-- Selector de elaboración -->
+  <div id="srv-sel">
+    <div class="srv-sel-hd">
+      <button class="srv-close" onclick="closeSrv()">&#x2715;</button>
+      <h2 id="srv-sel-title">&#9654; Modo Servicio</h2>
+    </div>
+    <div class="srv-sel-body" id="srv-sel-body"></div>
+  </div>
+  <!-- Paso a paso -->
   <div class="srv-hd">
     <h2 id="srv-title"></h2>
     <button class="srv-close" id="srv-close-btn">&#x2715;</button>
@@ -260,6 +311,22 @@ html,body{height:100%;font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",sa
   </div>
 </div>
 
+<!-- MODO ADAPTADO -->
+<div id="adp">
+  <div class="adp-hd">
+    <span style="font-size:22px">&#129504;</span>
+    <h2 id="adp-title">Modo Adaptado</h2>
+    <button class="adp-close" onclick="closeAdp()">&#x2715;</button>
+  </div>
+  <div class="adp-prog-wrap"><div class="adp-prog-bar" id="adp-bar" style="width:0%"></div></div>
+  <div class="adp-alerg" id="adp-alerg" style="display:none">&#9888; </div>
+  <div class="adp-body" id="adp-body">
+    <div class="adp-loading" id="adp-loading">
+      <div class="adp-spinner"></div>
+      <div class="adp-loading-txt">Preparando ficha adaptada...<br><span style="font-size:12px;opacity:.7">Simplificando los pasos con IA</span></div>
+    </div>
+  </div>
+</div>
 <!-- MODAL ENVIO PEDIDO -->
 <div id="modal-env">
   <div class="modal-box">
@@ -387,6 +454,7 @@ var peds=[];
 var cur='da', fPr='T', fFi='T', fMe='T';
 var pedAct=null, pedEnvIdx=-1;
 var srvSteps=[], srvIdx=0;
+var adpFicha=null, adpPasos=[], adpCompletados=0;
 var AE={Gluten:'&#127807;',Crustaceos:'&#129360;',Huevos:'&#129370;',Pescado:'&#128041;',Cacahuetes:'&#129379;',Soja:'&#129752;',Lacteos:'&#129371;','Frutos de cascara':'&#127806;',Apio:'&#127807;',Mostaza:'&#129483;',Sesamo:'&#127806;','Dioxido de azufre':'&#128168;',Altramuces:'&#127804;',Moluscos:'&#129442;'};
 var CLAS_COLS={Primeros:'#1565C0',Segundos:'#B71C1C',Postres:'#6A1B9A',Encargos:'#E65100'};
 var CLAS_ORD=['Primeros','Segundos','Postres','Encargos'];
@@ -673,10 +741,10 @@ function dFi(id){
   btnSrv.innerHTML='&#9654; Modo Servicio';
   btnSrv.onclick=function(){openSrv(f.id);};
   actDiv.appendChild(btnSrv);
-  var btnPed=ce('button','btn-sm btn-sm-g');btnPed.style='padding:12px 14px';
-  btnPed.innerHTML='&#43; Pedido';
-  btnPed.onclick=function(){addToPed(f);};
-  actDiv.appendChild(btnPed);
+  var btnAdp=ce('button','btn-adp');
+  btnAdp.innerHTML='&#129504; Modo Adaptado';
+  btnAdp.onclick=function(){openAdp(f.id);};
+  actDiv.appendChild(btnAdp);
   body.appendChild(actDiv);
   // Stats resumen
   var stats=ce('div');stats.style='display:flex;border-bottom:1px solid var(--f);margin-bottom:4px';
@@ -737,18 +805,65 @@ function dFi(id){
 // ---- MODO SERVICIO ----
 function openSrv(fid){
   var f=D.f.find(function(x){return x.id==fid;});if(!f)return;
-  var grupos=f.grupos||[];
-  srvSteps=[];
-  grupos.forEach(function(g){
-    g.pasos.forEach(function(p){
-      srvSteps.push({txt:p,elab:g.nombre});
-    });
-  });
-  if(!srvSteps.length){alert('Esta ficha no tiene pasos de elaboración registrados.');return;}
-  srvIdx=0;
-  G('srv-title').textContent=f.nombre;
+  var grupos=(f.grupos||[]).filter(function(g){return g.pasos&&g.pasos.length;});
+  if(!grupos.length){alert('Esta ficha no tiene pasos de elaboración registrados.');return;}
+
+  G('srv-sel-title').textContent=f.nombre;
   G('srv').classList.add('on');
-  renderSrv();
+
+  // Construir opciones del selector
+  var body=G('srv-sel-body');
+  body.innerHTML='';
+
+  // Opción "Ficha completa"
+  var totalPasos=grupos.reduce(function(a,g){return a+g.pasos.length;},0);
+  var optAll=document.createElement('div');
+  optAll.className='srv-sel-opt';
+  optAll.innerHTML='<div class="srv-sel-opt-left">'+
+    '<div class="srv-sel-opt-name">&#128196; Ficha completa</div>'+
+    '<div class="srv-sel-opt-meta">Todas las elaboraciones &middot; '+totalPasos+' pasos</div>'+
+    '</div><div class="srv-sel-opt-arr">&#8250;</div>';
+  optAll.onclick=function(){
+    srvSteps=[];
+    grupos.forEach(function(g){
+      g.pasos.forEach(function(p){srvSteps.push({txt:p,elab:g.nombre});});
+    });
+    srvIdx=0;
+    G('srv-title').textContent=f.nombre;
+    G('srv-sel').classList.remove('on');
+    renderSrv();
+  };
+  body.appendChild(optAll);
+
+  // Separador si hay más de una elaboración
+  if(grupos.length>1){
+    var sep=document.createElement('div');
+    sep.style='color:rgba(255,255,255,.3);font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.5px;margin:14px 0 8px';
+    sep.textContent='O elige una elaboración';
+    body.appendChild(sep);
+  }
+
+  // Una opción por elaboración
+  grupos.forEach(function(g){
+    var opt=document.createElement('div');
+    opt.className='srv-sel-opt';
+    opt.innerHTML='<div class="srv-sel-opt-left">'+
+      '<div class="srv-sel-opt-name">'+g.nombre+'</div>'+
+      '<div class="srv-sel-opt-meta">'+g.pasos.length+' paso'+(g.pasos.length!==1?'s':'')+'</div>'+
+      '</div><div class="srv-sel-opt-arr">&#8250;</div>';
+    opt.onclick=(function(grupo){
+      return function(){
+        srvSteps=grupo.pasos.map(function(p){return {txt:p,elab:grupo.nombre};});
+        srvIdx=0;
+        G('srv-title').textContent=grupo.nombre;
+        G('srv-sel').classList.remove('on');
+        renderSrv();
+      };
+    })(g);
+    body.appendChild(opt);
+  });
+
+  G('srv-sel').classList.add('on');
 }
 function renderSrv(){
   var step=srvSteps[srvIdx],total=srvSteps.length;
@@ -763,7 +878,248 @@ function renderSrv(){
   G('srv-prev-btn').style.opacity=srvIdx===0?'0.3':'1';
   G('srv-prev-btn').disabled=srvIdx===0;
 }
-function closeSrv(){G('srv').classList.remove('on');}
+function closeSrv(){G('srv').classList.remove('on');G('srv-sel').classList.remove('on');}
+
+// ---- MODO ADAPTADO ----
+var INGR_EMOJIS={
+  'aceite':'&#129693;','ajo':'&#129476;','sal':'&#129474;','pimienta':'&#11835;',
+  'harina':'&#127798;','huevo':'&#129717;','mantequilla':'&#129480;','leche':'&#129371;',
+  'tomate':'&#127829;','cebolla':'&#129365;','pimiento':'&#127798;','calabacin':'&#129382;',
+  'zanahoria':'&#129365;','patata':'&#129362;','pollo':'&#127831;','carne':'&#129385;',
+  'pescado':'&#128031;','anchoa':'&#128031;','antxoa':'&#128031;','merluza':'&#128031;',
+  'bacalao':'&#128031;','salmon':'&#128031;','gambas':'&#129408;','langostino':'&#129408;',
+  'agua':'&#128167;','vino':'&#127863;','limón':'&#127819;','naranja':'&#127818;',
+  'azucar':'&#127840;','arroz':'&#127859;','pasta':'&#127837;','pan':'&#127838;',
+  'queso':'&#129472;','nata':'&#127997;','perejil':'&#127807;','albahaca':'&#127807;',
+  'piquillo':'&#127798;'
+};
+function getIngEmoji(nombre){
+  var n=nombre.toLowerCase();
+  for(var k in INGR_EMOJIS){if(n.indexOf(k)>=0)return INGR_EMOJIS[k];}
+  return '&#127859;';
+}
+function detectaAlerta(txt){
+  var t=txt.toLowerCase();
+  if(t.indexOf('aceite')>=0&&(t.indexOf('caliente')>=0||t.indexOf('freir')>=0||t.indexOf('fre&#237;')>=0))return '&#128293; CUIDADO: aceite caliente. Avisa al profesor.';
+  if(t.indexOf('horno')>=0)return '&#128293; CUIDADO: horno caliente. Avisa al profesor.';
+  if(t.indexOf('cuchillo')>=0||t.indexOf('cortar')>=0)return '&#9997; Usa el cuchillo con cuidado. Pide ayuda si lo necesitas.';
+  if(t.indexOf('congelar')>=0||t.indexOf('congela')>=0)return '&#10052; Recuerda: esto va al congelador.';
+  return null;
+}
+
+async function simplificarPasoIA(paso, elab, ingredientes){
+  try {
+    var listaIngr=ingredientes.map(function(i){return i.nombre+' '+i.cantidad_neta+' '+i.unidad;}).join(', ');
+    var prompt='Eres un experto en adaptaciones curriculares para alumnado con discapacidad intelectual en cocina profesional.\n\nReescribe este paso de cocina en lenguaje MUY sencillo, claro y corto. Reglas:\n- Usa frases cortas (máx 15 palabras por frase)\n- Empieza con un verbo de acción en infinitivo o imperativo\n- Si hay términos técnicos, explícalos entre paréntesis brevemente\n- Máximo 2-3 frases\n- No uses puntuación compleja\n- Idioma español\n\nContexto elaboración: '+elab+'\nIngredientes disponibles: '+listaIngr+'\nPaso original: '+paso+'\n\nEscribe SOLO el paso simplificado, sin explicaciones ni introducción:';
+    var resp=await fetch('https://api.anthropic.com/v1/messages',{
+      method:'POST',
+      headers:{'Content-Type':'application/json'},
+      body:JSON.stringify({
+        model:'claude-sonnet-4-6',
+        max_tokens:200,
+        messages:[{role:'user',content:prompt}]
+      })
+    });
+    var data=await resp.json();
+    if(data&&data.content&&data.content[0]&&data.content[0].text){
+      return data.content[0].text.trim();
+    }
+  } catch(e){}
+  return paso; // fallback al texto original
+}
+
+async function openAdp(fid){
+  var f=D.f.find(function(x){return x.id==fid;});if(!f)return;
+  var grupos=f.grupos||[];
+  var totalPasos=grupos.reduce(function(a,g){return a+(g.pasos?g.pasos.length:0);},0);
+  if(!totalPasos){alert('Esta ficha no tiene pasos registrados.');return;}
+
+  adpFicha=f;
+  adpPasos=[];
+  adpCompletados=0;
+
+  // Cabecera
+  G('adp-title').textContent=f.nombre;
+
+  // Alérgenos
+  var al=(f.alergenos||'').split(',').map(function(a){return a.trim();}).filter(Boolean);
+  if(al.length){
+    G('adp-alerg').style.display='flex';
+    G('adp-alerg').innerHTML='&#9888; <strong>ALERG&Eacute;MENOS:</strong>&nbsp;'+al.join(' &middot; ');
+  } else {
+    G('adp-alerg').style.display='none';
+  }
+
+  // Mostrar loading
+  G('adp-bar').style.width='0%';
+  G('adp-body').innerHTML='<div class="adp-loading" id="adp-loading"><div class="adp-spinner"></div><div class="adp-loading-txt">Preparando ficha adaptada...<br><span style="font-size:12px;opacity:.7">Simplificando los pasos con IA</span></div></div>';
+  G('adp').classList.add('on');
+
+  // Construir lista de pasos a simplificar
+  var tareasIA=[];
+  grupos.forEach(function(g){
+    if(!g.pasos||!g.pasos.length)return;
+    g.pasos.forEach(function(paso){
+      tareasIA.push({paso:paso,elab:g.nombre,ingrs:g.ingredientes||[]});
+    });
+  });
+
+  // Simplificar todos los pasos con IA (en paralelo, máx 5 a la vez para no saturar)
+  var simplificados=[];
+  for(var i=0;i<tareasIA.length;i+=4){
+    var batch=tareasIA.slice(i,i+4);
+    var resultsBatch=await Promise.all(batch.map(function(t){
+      return simplificarPasoIA(t.paso,t.elab,t.ingrs);
+    }));
+    resultsBatch.forEach(function(r){simplificados.push(r);});
+    // Actualizar barra de progreso de carga
+    var pct=Math.min(Math.round((i+batch.length)/tareasIA.length*90),90);
+    G('adp-bar').style.width=pct+'%';
+  }
+
+  // Reconstruir estructura con textos simplificados
+  var idx=0;
+  grupos.forEach(function(g){
+    if(!g.pasos||!g.pasos.length)return;
+    g.pasos.forEach(function(paso,pi){
+      adpPasos.push({
+        txt: simplificados[idx]||paso,
+        txtOrig: paso,
+        elab: g.nombre,
+        primerDeGrupo: pi===0,
+        ingrs: g.ingredientes||[],
+        completado: false,
+        idx: adpPasos.length
+      });
+      idx++;
+    });
+  });
+
+  // Renderizar ficha adaptada
+  renderAdp();
+  G('adp-bar').style.width='0%';
+}
+
+function renderAdp(){
+  var body=G('adp-body');
+  body.innerHTML='';
+
+  adpPasos.forEach(function(p,i){
+    // Separador de elaboración
+    if(p.primerDeGrupo){
+      var sep=document.createElement('div');
+      sep.className='adp-elab-sep';
+      sep.textContent=p.elab;
+      body.appendChild(sep);
+    }
+
+    var div=document.createElement('div');
+    div.className='adp-paso'+(i===0?' activo':'')+(i>0?' bloqueado':'');
+    div.id='adp-paso-'+i;
+
+    // Cabecera del paso
+    var hd=document.createElement('div');
+    hd.className='adp-paso-hd';
+
+    var numEl=document.createElement('div');
+    numEl.className='adp-num';
+    numEl.textContent=(i+1);
+
+    var txtEl=document.createElement('div');
+    txtEl.className='adp-paso-txt';
+    txtEl.innerHTML=p.txt;
+
+    var btn=document.createElement('button');
+    btn.className='adp-check-btn';
+    btn.innerHTML='&#10003;';
+    btn.setAttribute('aria-label','Marcar paso completado');
+    btn.onclick=(function(idx){
+      return function(){marcarAdpPaso(idx);};
+    })(i);
+
+    hd.appendChild(numEl);
+    hd.appendChild(txtEl);
+    hd.appendChild(btn);
+    div.appendChild(hd);
+
+    // Alerta si procede
+    var alerta=detectaAlerta(p.txtOrig);
+    if(alerta){
+      var altDiv=document.createElement('div');
+      altDiv.className='adp-alerta';
+      altDiv.innerHTML=alerta;
+      div.appendChild(altDiv);
+    }
+
+    body.appendChild(div);
+  });
+
+  // Espacio final
+  var fin=document.createElement('div');
+  fin.style='height:40px';
+  body.appendChild(fin);
+
+  actualizarProgresoAdp();
+}
+
+function marcarAdpPaso(idx){
+  var paso=adpPasos[idx];
+  if(!paso||paso.completado)return;
+
+  // Marcar como completado
+  paso.completado=true;
+  adpCompletados++;
+
+  var el=G('adp-paso-'+idx);
+  if(el){
+    el.classList.add('completado');
+    el.classList.remove('activo','bloqueado');
+  }
+
+  // Desbloquear siguiente
+  var siguiente=idx+1;
+  if(siguiente<adpPasos.length){
+    var sigEl=G('adp-paso-'+siguiente);
+    if(sigEl){
+      sigEl.classList.remove('bloqueado');
+      sigEl.classList.add('activo');
+      // Hacer scroll suave al siguiente paso
+      setTimeout(function(){
+        sigEl.scrollIntoView({behavior:'smooth',block:'center'});
+      },300);
+    }
+  } else {
+    // Todos completados
+    setTimeout(function(){mostrarAdpFin();},400);
+  }
+
+  actualizarProgresoAdp();
+}
+
+function actualizarProgresoAdp(){
+  var total=adpPasos.length;
+  var pct=total?Math.round(adpCompletados/total*100):0;
+  G('adp-bar').style.width=pct+'%';
+}
+
+function mostrarAdpFin(){
+  var body=G('adp-body');
+  var finDiv=document.createElement('div');
+  finDiv.style='text-align:center;padding:40px 24px;';
+  finDiv.innerHTML='<div style="font-size:64px;margin-bottom:16px">&#127881;</div>'+
+    '<div style="font-size:22px;font-weight:800;color:#2E7D52;margin-bottom:8px">&#161;Muy bien!</div>'+
+    '<div style="font-size:15px;color:#5C6B63;margin-bottom:28px">Has completado todos los pasos de la receta.</div>'+
+    '<button onclick="closeAdp()" style="padding:14px 32px;background:#2E7D52;color:#fff;border:none;border-radius:13px;font-size:16px;font-weight:700;cursor:pointer">Volver a la ficha</button>';
+  body.appendChild(finDiv);
+  body.scrollTop=body.scrollHeight;
+}
+
+function closeAdp(){
+  G('adp').classList.remove('on');
+  adpPasos=[];
+  adpCompletados=0;
+  adpFicha=null;
+}
 
 // ---- DETALLE PRODUCTO ----
 function dPr(id){
