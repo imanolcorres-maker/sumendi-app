@@ -1,55 +1,47 @@
-const CACHE_APP = 'sumendi-app-v5';
-const CACHE_DATA = 'sumendi-data-v5';
-const BASE = '/sumendi-app';
+const CACHE = 'sumendi-v8';
 const ASSETS = [
-  BASE+'/',
-  BASE+'/index.html',
-  BASE+'/manifest.json',
-  BASE+'/icon-192.png',
-  BASE+'/icon-512.png'
+  '/',
+  '/index.html',
+  '/manifest.json',
+  '/icon-192v2.png',
+  '/icon-512v2.png',
+  '/icon-192.png',
+  '/icon-512.png',
+  '/sw.js'
 ];
 
-self.addEventListener('install', function(e){
+// Instalar: cachear todos los assets
+self.addEventListener('install', e => {
   e.waitUntil(
-    caches.open(CACHE_APP)
-      .then(function(c){return c.addAll(ASSETS);})
-      .then(function(){return self.skipWaiting();})
+    caches.open(CACHE).then(c => c.addAll(ASSETS))
   );
+  self.skipWaiting(); // activar inmediatamente
 });
 
-self.addEventListener('activate', function(e){
+// Activar: borrar caches antiguas
+self.addEventListener('activate', e => {
   e.waitUntil(
-    caches.keys().then(function(keys){
-      return Promise.all(
-        keys.filter(function(k){return k!==CACHE_APP && k!==CACHE_DATA;})
-            .map(function(k){return caches.delete(k);})
-      );
-    }).then(function(){return self.clients.claim();})
+    caches.keys().then(keys =>
+      Promise.all(keys.filter(k => k !== CACHE).map(k => caches.delete(k)))
+    )
   );
+  self.clients.claim();
 });
 
-self.addEventListener('fetch', function(e){
-  var url = e.request.url;
-
-  // Datos GitHub Pages y CDN — cache con red primero
-  if(url.indexOf('github.io') >= 0 || url.indexOf('cdnjs.cloudflare.com') >= 0){
-    e.respondWith(
-      caches.open(CACHE_DATA).then(function(cache){
-        return fetch(e.request).then(function(response){
-          cache.put(e.request, response.clone());
-          return response;
-        }).catch(function(){
-          return cache.match(e.request);
-        });
-      })
-    );
-    return;
-  }
-
-  // App shell — cache primero
+// Fetch: network first, cache fallback
+self.addEventListener('fetch', e => {
+  // Solo interceptar peticiones GET al mismo origen
+  if (e.request.method !== 'GET') return;
   e.respondWith(
-    caches.match(e.request).then(function(r){
-      return r || fetch(e.request);
-    })
+    fetch(e.request)
+      .then(res => {
+        // Guardar en cache si es un asset conocido
+        if (res && res.status === 200) {
+          const clone = res.clone();
+          caches.open(CACHE).then(c => c.put(e.request, clone));
+        }
+        return res;
+      })
+      .catch(() => caches.match(e.request))
   );
 });
